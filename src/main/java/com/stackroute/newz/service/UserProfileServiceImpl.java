@@ -1,6 +1,5 @@
 package com.stackroute.newz.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,57 +24,72 @@ import com.stackroute.newz.util.exception.UserProfileNotExistsException;
 @Transactional
 public class UserProfileServiceImpl implements UserProfileService {
 
-	/*
-	 * Autowiring should be implemented for the UserProfileRepository.
-	 */
-	
-
+	@Autowired
+	private UserProfileRepository userProfileRepository;
 
 	/*
-	 * Add a new user. Throw UserProfileAlreadyExistsException if the userProfile with specified
-	 * userId already exists.
+	 * Add a new user. Throw UserProfileAlreadyExistsException if the userProfile
+	 * with specified userId already exists.
 	 */
 	public UserProfile registerUser(UserProfile user) throws UserProfileAlreadyExistsException {
 
-		return null;
+		Optional<UserProfile> optionalNews = userProfileRepository.findById(user.getUserId());
+		if (optionalNews.isPresent()) {
+			throw new UserProfileAlreadyExistsException();
+		}
+
+		return userProfileRepository.save(user);
 	}
 
 	/*
-	 * Update an existing userProfile by it's userId. Throw UserProfileNotExistsException 
-	 * if the userProfile with specified userId does not exist.
+	 * Update an existing userProfile by it's userId. Throw
+	 * UserProfileNotExistsException if the userProfile with specified userId does
+	 * not exist.
 	 */
-	public UserProfile updateUserProfile(UserProfile user, String userId) 
-			throws UserProfileNotExistsException {
+	public UserProfile updateUserProfile(UserProfile user, String userId) throws UserProfileNotExistsException {
 
-		return null;
+		Optional<UserProfile> optionalReminder = userProfileRepository.findById(userId);
+		if (!optionalReminder.isPresent()) {
+			throw new UserProfileNotExistsException();
+		}
+
+		return userProfileRepository.save(user);
 	}
 
-	
 	/*
-	 * Delete an existing userProfile by it's userId. Throw UserProfileNotExistsException if 
-	 * the userProfile with specified userId does not exist.
+	 * Delete an existing userProfile by it's userId. Throw
+	 * UserProfileNotExistsException if the userProfile with specified userId does
+	 * not exist.
 	 */
 	public void deleteUserProfile(String userId) throws UserProfileNotExistsException {
-		
-		
+		Optional<UserProfile> optionalReminder = userProfileRepository.findById(userId);
+		if (!optionalReminder.isPresent()) {
+			throw new UserProfileNotExistsException();
+		}
+
+		userProfileRepository.delete(optionalReminder.get());
 	}
-	
-	
+
 	/*
-	 * Retrieve an existing userProfile by it's userId. Throw UserProfileNotExistsException 
-	 * if the userProfile with specified userId does not exist.
+	 * Retrieve an existing userProfile by it's userId. Throw
+	 * UserProfileNotExistsException if the userProfile with specified userId does
+	 * not exist.
 	 */
 	public UserProfile getUserProfile(String userId) throws UserProfileNotExistsException {
-		
-		return null;
+		Optional<UserProfile> optionalReminder = userProfileRepository.findById(userId);
+		if (!optionalReminder.isPresent()) {
+			throw new UserProfileNotExistsException();
+		}
+
+		return optionalReminder.get();
 	}
 
 	/*
 	 * Retrieve all existing userProfiles
 	 */
 	public List<UserProfile> getAllUserProfiles() {
-		
-		return null;
+
+		return userProfileRepository.findAll();
 	}
 
 }
