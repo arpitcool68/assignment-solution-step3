@@ -14,11 +14,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 @Entity
-@Table(name = "REMINDER")
+@Table(name = "reminder")
 public class Reminder {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "reminderId")
 	private int reminderId;
 	@Column(name = "schedule")

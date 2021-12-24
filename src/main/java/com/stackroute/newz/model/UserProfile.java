@@ -17,11 +17,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 @Entity
-@Table(name = "USER_PROFILE")
+@Table(name = "user_profile")
 public class UserProfile {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "userId")
 	private String userId;
 	@Column(name = "firstName")

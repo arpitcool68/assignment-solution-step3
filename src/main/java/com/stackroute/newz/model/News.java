@@ -41,7 +41,6 @@ public class News {
 	private String urlToImage;
 	@ManyToOne
 	@JsonIgnore
-	@JoinColumn(name = "userId" , nullable = false)
 	private UserProfile user;
 	@OneToOne(targetEntity = Reminder.class)
 	@JsonIgnore

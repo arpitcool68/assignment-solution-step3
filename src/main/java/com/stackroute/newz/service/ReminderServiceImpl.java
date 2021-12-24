@@ -12,13 +12,7 @@ import com.stackroute.newz.model.Reminder;
 import com.stackroute.newz.repository.ReminderRepository;
 import com.stackroute.newz.util.exception.ReminderNotExistsException;
 
-/*
- * This class is implementing the ReminderService interface. This class has to be annotated with 
- * @Service annotation.
- * @Service - is an annotation that annotates classes at the service layer, thus 
- * clarifying it's role.
- * 
- * */
+
 @Service
 @Transactional
 public class ReminderServiceImpl implements ReminderService {
