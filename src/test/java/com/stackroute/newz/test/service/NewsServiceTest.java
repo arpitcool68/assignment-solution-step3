@@ -63,7 +63,7 @@ class NewsServiceTest {
 	@Rollback(true)
 	public void testAddNewsSuccess() throws NewsAlreadyExistsException {
 
-		when(newsRepository.getOne(any())).thenReturn(null);
+		when(newsRepository.getOne(any())).thenReturn(news);
 		when(newsRepository.save(any())).thenReturn(news);
 
 		assertEquals(news, newsService.addNews(news));

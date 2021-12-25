@@ -32,14 +32,15 @@ public class ReminderServiceImpl implements ReminderService {
 	 * ReminderNotExistsException if the reminder with specified reminderId does not
 	 * exist.
 	 */
+	@Override
 	public Reminder updateReminder(Reminder reminder) throws ReminderNotExistsException {
 
-		Optional<Reminder> optionalReminder = reminderRepository.findById(reminder.getReminderId());
-		if (!optionalReminder.isPresent()) {
+		Reminder fetchedReminderObj = reminderRepository.getOne(reminder.getReminderId());
+		if(null != fetchedReminderObj) {
+			return reminderRepository.saveAndFlush(reminder);
+		}else {
 			throw new ReminderNotExistsException();
 		}
-
-		return reminderRepository.save(reminder);
 	}
 
 	/*
@@ -49,12 +50,13 @@ public class ReminderServiceImpl implements ReminderService {
 	 */
 	public void deleteReminder(int reminderId) throws ReminderNotExistsException {
 
-		Optional<Reminder> optionalReminder = reminderRepository.findById(reminderId);
-		if (!optionalReminder.isPresent()) {
+		Reminder fetchedReminderObj = reminderRepository.getOne(reminderId);
+		if(null != fetchedReminderObj) {
+			reminderRepository.deleteById(reminderId);
+		}else {
 			throw new ReminderNotExistsException();
 		}
-
-		reminderRepository.delete(optionalReminder.get());
+		
 	}
 
 	/*

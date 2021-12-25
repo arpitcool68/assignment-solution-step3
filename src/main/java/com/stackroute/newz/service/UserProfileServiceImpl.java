@@ -48,12 +48,12 @@ public class UserProfileServiceImpl implements UserProfileService {
 	 */
 	public UserProfile updateUserProfile(UserProfile user, String userId) throws UserProfileNotExistsException {
 
-		Optional<UserProfile> optionalReminder = userProfileRepository.findById(userId);
-		if (!optionalReminder.isPresent()) {
+		UserProfile fetchedUserProfileObj  = userProfileRepository.getOne(userId);
+		if(null != fetchedUserProfileObj) {
+			return userProfileRepository.saveAndFlush(user);
+		}else {
 			throw new UserProfileNotExistsException();
 		}
-
-		return userProfileRepository.save(user);
 	}
 
 	/*
@@ -62,12 +62,12 @@ public class UserProfileServiceImpl implements UserProfileService {
 	 * not exist.
 	 */
 	public void deleteUserProfile(String userId) throws UserProfileNotExistsException {
-		Optional<UserProfile> optionalReminder = userProfileRepository.findById(userId);
-		if (!optionalReminder.isPresent()) {
+		UserProfile fetchedUserProfileObj = userProfileRepository.getOne(userId);
+		if(null != fetchedUserProfileObj) {
+			userProfileRepository.deleteById(userId);
+		}else {
 			throw new UserProfileNotExistsException();
 		}
-
-		userProfileRepository.delete(optionalReminder.get());
 	}
 
 	/*

@@ -27,64 +27,54 @@ public class NewsServiceImpl implements NewsService {
 
 	@Autowired
 	private NewsRepository newsRepository;
-	
-	/*
-	 * Add a new news. Throw NewsAlreadyExistsException if the news with specified
-	 * newsId already exists.
-	 */
+
+	@Override
 	public News addNews(News news) throws NewsAlreadyExistsException {
-		Optional<News> optionalNews = newsRepository.findById(news.getNewsId());
-		if (optionalNews.isPresent()) {
+
+		News fetchedNewsObj = newsRepository.getOne(news.getNewsId());
+		if (null != fetchedNewsObj) {
+			return newsRepository.saveAndFlush(news);
+		}else {
 			throw new NewsAlreadyExistsException();
 		}
-
-		return newsRepository.save(news);
 	}
 
-	/*
-	 * Retrieve an existing news by it's newsId. Throw NewsNotExistsException if the
-	 * news with specified newsId does not exist.
-	 */
+	@Override
 	public News getNews(int newsId) throws NewsNotExistsException {
-		
+
 		Optional<News> optionalNews = newsRepository.findById(newsId);
 		if (!optionalNews.isPresent()) {
 			throw new NewsNotExistsException();
 		}
-		
+
 		return optionalNews.get();
 	}
 
-	/*
-	 * Retrieve all existing news
-	 */
+	@Override
 	public List<News> getAllNews() {
 		return newsRepository.findAll();
 	}
 
-	/*
-	 * Update an existing news by it's newsId. Throw NewsNotExistsException if the
-	 * news with specified newsId does not exist.
-	 */
+	@Override
 	public News updateNews(News news) throws NewsNotExistsException {
-		Optional<News> optionalNews = newsRepository.findById(news.getNewsId());
-		if (!optionalNews.isPresent()) {
+		News fetchedNewsObj = newsRepository.getOne(news.getNewsId());
+		if(null != fetchedNewsObj) {
+			return newsRepository.saveAndFlush(news);
+		}else {
 			throw new NewsNotExistsException();
 		}
-		return newsRepository.save(news);
+	
 	}
 
-	/*
-	 * Delete an existing news by it's newsId. Throw NewsNotExistsException if the
-	 * news with specified newsId does not exist.
-	 */
+	@Override
 	public void deleteNews(int newsId) throws NewsNotExistsException {
-		Optional<News> optionalNews = newsRepository.findById(newsId);
-		if (!optionalNews.isPresent()) {
-			throw new NewsNotExistsException();
+		News fetchedNews = newsRepository.getOne(newsId);
+		if (null != fetchedNews) {
+			newsRepository.delete(fetchedNews);
+			
+		}else {
+		throw new NewsNotExistsException();
 		}
-		
-		newsRepository.delete(optionalNews.get());
 	}
 
 }
