@@ -64,9 +64,7 @@ public class NewsController {
 	@PutMapping("{newsId}")
 	public ResponseEntity<News> update(@RequestBody News news, @PathVariable Integer newsId) {
 		try {
-			News existingNews = newsService.getNews(newsId);
-			BeanUtils.copyProperties(news, existingNews);
-			return new ResponseEntity<>(newsService.updateNews(existingNews), HttpStatus.OK);
+			return new ResponseEntity<>(newsService.updateNews(news), HttpStatus.OK);
 		} catch (NewsNotExistsException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -75,8 +73,7 @@ public class NewsController {
 	@DeleteMapping("{newsId}")
 	public ResponseEntity<News> delete(@PathVariable Integer newsId) {
 		try {
-			News existingNews = newsService.getNews(newsId);
-			newsService.deleteNews(existingNews.getNewsId());
+			newsService.deleteNews(newsId);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (NewsNotExistsException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

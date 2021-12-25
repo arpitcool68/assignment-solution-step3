@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.stackroute.newz.model.UserProfile;
 import com.stackroute.newz.service.UserProfileService;
+import com.stackroute.newz.util.exception.UserProfileAlreadyExistsException;
 import com.stackroute.newz.util.exception.UserProfileNotExistsException;
 
 @RestController
@@ -28,14 +29,9 @@ public class UserProfileController {
 	@PostMapping
 	public ResponseEntity<UserProfile> register(@RequestBody UserProfile userProfileObj) {
 		try {
-			UserProfile searchedUserProfile = userProfileService.getUserProfile(userProfileObj.getUserId());
-			if (searchedUserProfile.getUserId() == userProfileObj.getUserId()) {
-				return new ResponseEntity<>(HttpStatus.CONFLICT);
-			}
-			UserProfile savedUserProfileObj = userProfileService.registerUser(userProfileObj);
-			return new ResponseEntity<>(savedUserProfileObj, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(userProfileService.registerUser(userProfileObj), HttpStatus.CREATED);
+		} catch (UserProfileAlreadyExistsException e) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}
 
@@ -77,8 +73,7 @@ public class UserProfileController {
 	@DeleteMapping("{userId}")
 	public ResponseEntity<UserProfile> delete(@PathVariable String userId) {
 		try {
-			UserProfile existingNews = userProfileService.getUserProfile(userId);
-			userProfileService.deleteUserProfile(existingNews.getUserId());
+			userProfileService.deleteUserProfile(userId);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (UserProfileNotExistsException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -2,7 +2,6 @@ package com.stackroute.newz.controller;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,12 +54,7 @@ public class ReminderController {
 	@PostMapping
 	public ResponseEntity<Reminder> add(@RequestBody Reminder reminderObj) {
 		try {
-			Reminder searchReminder = reminderService.getReminder(reminderObj.getReminderId());
-			if (searchReminder.getReminderId() == reminderObj.getReminderId()) {
-				return new ResponseEntity<>(HttpStatus.CONFLICT);
-			}
-			Reminder savedNewsObj = reminderService.addReminder(reminderObj);
-			return new ResponseEntity<>(savedNewsObj, HttpStatus.CREATED);
+			return new ResponseEntity<>(reminderService.addReminder(reminderObj), HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -69,9 +63,7 @@ public class ReminderController {
 	@PutMapping("{reminderId}")
 	public ResponseEntity<Reminder> update(@RequestBody Reminder reminderObj, @PathVariable Integer reminderId) {
 		try {
-			Reminder existingReminder = reminderService.getReminder(reminderId);
-			BeanUtils.copyProperties(reminderObj, existingReminder);
-			return new ResponseEntity<>(reminderService.updateReminder(existingReminder), HttpStatus.OK);
+			return new ResponseEntity<>(reminderService.updateReminder(reminderObj), HttpStatus.OK);
 		} catch (ReminderNotExistsException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -80,8 +72,7 @@ public class ReminderController {
 	@DeleteMapping("{reminderId}")
 	public ResponseEntity<Reminder> delete(@PathVariable Integer reminderId) {
 		try {
-			Reminder existingReminder = reminderService.getReminder(reminderId);
-			reminderService.deleteReminder(existingReminder.getReminderId());
+			reminderService.deleteReminder(reminderId);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (ReminderNotExistsException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

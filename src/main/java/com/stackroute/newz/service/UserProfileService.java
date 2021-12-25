@@ -8,10 +8,6 @@ import com.stackroute.newz.util.exception.UserProfileNotExistsException;
 
 public interface UserProfileService {
 
-	/*
-	 * Should not modify this interface. You have to implement these methods in
-	 * corresponding Impl classes
-	 */
 	public UserProfile registerUser(UserProfile user) throws UserProfileAlreadyExistsException;
 
 	public UserProfile updateUserProfile(UserProfile user, String userId) throws UserProfileNotExistsException;
